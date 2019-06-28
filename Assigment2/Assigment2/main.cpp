@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <cmath>
-#include<windows.h>	
+#include<windows.h>
 
 #include <GL/glew.h>
 #include <freeglut/glut.h>
@@ -119,7 +119,7 @@ static GLvoid glmCross(GLfloat u[3], GLfloat v[3], GLfloat n[3])
 	n[2] = u[0] * v[1] - u[1] * v[0];
 }
 
-// [TODO] given a translation vector then output a Matrix4 (Translation Matrix)
+// Given a translation vector then output a Matrix4 (Translation Matrix)
 Matrix4 translate(Vector3 vec)
 {
 	Matrix4 mat;
@@ -132,7 +132,7 @@ Matrix4 translate(Vector3 vec)
 	return mat;
 }
 
-// [TODO] given a scaling vector then output a Matrix4 (Scaling Matrix)
+// Given a scaling vector then output a Matrix4 (Scaling Matrix)
 Matrix4 scaling(Vector3 vec)
 {
 	Matrix4 mat;
@@ -145,7 +145,7 @@ Matrix4 scaling(Vector3 vec)
 	return mat;
 }
 
-// [TODO] given a float value then ouput a rotation matrix along axis-X (rotate alone axis-X)
+// Given a float value then ouput a rotation matrix along axis-X (rotate alone axis-X)
 Matrix4 rotateX(GLfloat val)
 {
 	Matrix4 mat;
@@ -158,7 +158,7 @@ Matrix4 rotateX(GLfloat val)
 	return mat;
 }
 
-// [TODO] given a float value then ouput a rotation matrix along axis-Y (rotate alone axis-Y)
+// Given a float value then ouput a rotation matrix along axis-Y (rotate alone axis-Y)
 Matrix4 rotateY(GLfloat val)
 {
 	Matrix4 mat;
@@ -171,7 +171,7 @@ Matrix4 rotateY(GLfloat val)
 	return mat;
 }
 
-// [TODO] given a float value then ouput a rotation matrix along axis-Z (rotate alone axis-Z)
+// Given a float value then ouput a rotation matrix along axis-Z (rotate alone axis-Z)
 Matrix4 rotateZ(GLfloat val)
 {
 	Matrix4 mat;
@@ -192,7 +192,7 @@ Matrix4 rotate(Vector3 vec)
 
 void setViewingMatrix()
 {
-	// [TODO] compute viewing matrix according to the setting of main_camera, then assign to view_matrix
+	// Compute viewing matrix according to the setting of main_camera, then assign to view_matrix
 	Vector3 Rz = (main_camera.center - main_camera.position).normalize();
 	Vector3 Rx = Rz.cross(main_camera.up_vector).normalize();
 	Vector3 Ry = Rx.cross(Rz).normalize();
@@ -201,13 +201,13 @@ void setViewingMatrix()
 				Rx[0], Rx[1], Rx[2], 0,
 				Ry[0], Ry[1], Ry[2], 0,
 				-Rz[0], -Rz[1], -Rz[2], 0,
-				0, 0, 0, 1 ) * translate(-main_camera.position); 
+				0, 0, 0, 1 ) * translate(-main_camera.position);
 }
 
 void setOrthogonal()
 {
 	cur_proj_mode = Orthogonal;
-	// [TODO] compute orthogonal projection matrix, then assign to project_matrix
+	// Compute orthogonal projection matrix, then assign to project_matrix
 	GLfloat tx = -(proj.right + proj.left) / (proj.right - proj.left);
 	GLfloat ty = -(proj.top + proj.bottom) / (proj.top - proj.bottom);
 	GLfloat tz = -(proj.farClip + proj.nearClip) / (proj.farClip - proj.nearClip);;
@@ -222,18 +222,11 @@ void setOrthogonal()
 void setPerspective()
 {
 	cur_proj_mode = Perspective;
-	// [TODO] compute persepective projection matrix, then assign to project_matrix
-	//GLfloat A = (proj.right + proj.left) / (proj.right - proj.left);
+	// Compute persepective projection matrix, then assign to project_matrix
 	GLfloat B = (proj.top + proj.bottom) / (proj.top - proj.bottom);
 	GLfloat C = -(proj.farClip + proj.nearClip) / (proj.farClip - proj.nearClip);
 	GLfloat D = -(2.0*proj.farClip*proj.nearClip) / (proj.farClip - proj.nearClip);
 
-	/*project_matrix = Matrix4(
-		2.0*proj.nearClip / (proj.right - proj.left), 0, A, 0,
-		0, 2.0*proj.nearClip / (proj.top - proj.bottom), B, 0,
-		0, 0, C, D,
-		0, 0, -1, 0
-		);*/
 	GLfloat f = cos(proj.fovy / 2) / sin(proj.fovy / 2);
 	project_matrix = Matrix4(
 		f / proj.aspect, 0, 0, 0,
@@ -242,12 +235,6 @@ void setPerspective()
 		0, 0, -1, 0
 	);
 
-}
-
-void modelMovement(model *m)
-{
-	// [TODO] Apply the movement on current frame
-	//float ang = 2 * PI / filenames.size();
 }
 
 void traverseColorModel(model &m)
@@ -259,7 +246,7 @@ void traverseColorModel(model &m)
 	m.vertices = new GLfloat[m.obj->numtriangles * 9];
 	m.colors = new GLfloat[m.obj->numtriangles * 9];
 
-	// The center position of the model 
+	// The center position of the model
 	m.obj->position[0] = 0;
 	m.obj->position[1] = 0;
 	m.obj->position[2] = 0;
@@ -391,18 +378,15 @@ float remainAngle1 = 0.0;
 
 void drawModel(model* model, int index)
 {
-	// [TODO] Add an offset before caculate the model position matrix
-	// e.x.: offset = index * 2
-	// Or you can set the offset value yourself
-
+	// Add an offset before caculate the model position matrix
+	// Arrange the models into a circle which radius is 4
 	float ang = 2 * PI / filenames.size();
 	float offset = (cur_idx - index) * ang + (1.5 + remainAngle - remainAngle1) * PI;
 	float x = cosf(offset) * 4;
 	float y = 4 + sinf(offset) * 4;
 
 	Matrix4 MVP;
-	// [TODO] Assign MVP correct value
-	// [HINT] MVP = projection_matrix * view_matrix * ??? * ??? * ???
+	// Assign MVP matrix
 	MVP = project_matrix * view_matrix * translate(model->position + Vector3(x, 0, -y)) * scaling(model->scale) * rotate(model->rotation) ;
 	// Since the glm matrix is row-major, so we change the matrix to column-major for OpenGL shader.
 	// row-major ---> column-major
@@ -446,7 +430,7 @@ void drawPlane()
 	mvp[2] = MVP[8];  mvp[6] = MVP[9];   mvp[10] = MVP[10];   mvp[14] = MVP[11];
 	mvp[3] = MVP[12]; mvp[7] = MVP[13];  mvp[11] = MVP[14];   mvp[15] = MVP[15];
 
-	// [TODO] Draw the plane
+	// Draw the plane
 
 	glVertexAttribPointer(iLocPosition, 3, GL_FLOAT, GL_FALSE, 0, vertices);
 	glVertexAttribPointer(iLocColor, 3, GL_FLOAT, GL_FALSE, 0, colors);
@@ -466,10 +450,10 @@ void onDisplay(void)
 
 	if (self_rotate)
 	{
-		// [TODO] Implement self rotation on current model
+		// Implement self rotation on current model
 		angle = 0.015;
 		models[cur_idx].rotation += Vector3(0, angle, 0);
-		
+
 	}
 	if (remainAngle > 0)
 		remainAngle -= 0.001;
@@ -480,11 +464,8 @@ void onDisplay(void)
 	{
 		// Draw all models
 		modelMovement(&models[i]);
-		//drawModel(&models[(cur_idx + i)% filenames.size()], i);
 		drawModel(&models[i], i);
 	}
-
-	
 	glutSwapBuffers();
 }
 
@@ -622,7 +603,6 @@ void onMouse(int who, int state, int x, int y)
 		break;
 	case GLUT_WHEEL_DOWN:
 		printf("wheel down    \n");
-		// [TODO] complete all switch case
 		switch (cur_trans_mode)
 		{
 		case ViewEye:
@@ -722,13 +702,13 @@ void onKeyboard(unsigned char key, int x, int y)
 		exit(0);
 		break;
 	case 'z':
-		// [TODO] Change model and trigger the model moving animation
+		// Change model and trigger the model moving animation
 		cur_idx = (cur_idx + filenames.size() - 1) % filenames.size();
 		remainAngle += PI / filenames.size() / 2;
 		printf("change to previous model");
 		break;
-	case 'x':		
-		// [TODO] Change model and trigger the model moving animation
+	case 'x':
+		// Change model and trigger the model moving animation
 		cur_idx = (cur_idx + 1) % filenames.size();
 		remainAngle1 += PI / filenames.size() /2;
 		printf("change to next model");
@@ -746,12 +726,12 @@ void onKeyboard(unsigned char key, int x, int y)
 			printf("stop self-rotating");
 		break;
 	case 'o':
-		// [TODO] Change to Orthogonal
+		// Change to Orthogonal
 		setOrthogonal();
 		printf("Orthogonal Projection");
 		break;
 	case 'p':
-		// [TODO] Change to Perspective
+		// Change to Perspective
 		setPerspective();
 		printf("Perspective Projection");
 		break;
@@ -780,9 +760,10 @@ void onKeyboard(unsigned char key, int x, int y)
 		printf("ViewUp");
 		break;
 	case 'i':
-		// [TODO] print the model name, mode, active operation etc...
+		// Show model's name, mode, active operation etc...
 		printf("\n");
-		cout << "current model: " << filenames[cur_idx] << endl;
+		cout << "Press | 0:GeoTrans | 1:GeoRotate | 2:GeoScale | 3:ViewCenter | 4:ViewEye | 5:ViewUp|" << "\n";
+		cout << "current model: " << filenames[cur_idx] << "\n";
 		switch (cur_trans_mode) {
 		case 0:
 			cout << "now changing translation factors";
@@ -804,7 +785,6 @@ void onKeyboard(unsigned char key, int x, int y)
 			break;
 		}
 		cout << "\n";
-		//cout << "|0:GeoTrans | 1:GeoRotate | 2:GeoScale | 3:ViewCenter | 4:ViewEye | 5:ViewUp|" << endl;
 		break;
 	}
 	printf("\n");
@@ -857,14 +837,14 @@ void loadConfigFile()
 		printf("%s\n", filenames[i].c_str());
 }
 
-// you can setup your own camera setting when testing
+// Can setup your own camera setting when testing
 void initParameter()
 {
 	proj.left = -1;
 	proj.right = 1;
 	proj.top = 1;
 	proj.bottom = -1;
-	// 0.01 1000
+	//origin:  0.01 1000
 	proj.nearClip = 0.1;
 	proj.farClip = 1000.0;
 	proj.fovy = 45;
@@ -932,4 +912,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
