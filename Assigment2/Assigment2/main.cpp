@@ -89,10 +89,12 @@ camera main_camera;
 
 int current_x, current_y;
 
-model* models;							// store the models we load
-vector<string> filenames;				// .obj filename list
-
-int cur_idx = 0;						// represent which model should be rendered now
+// store the models we load
+model* models;
+// .obj filename list
+vector<string> filenames;
+// represent which model should be rendered now
+int cur_idx = 0;
 
 bool use_wire_mode = false;
 bool self_rotate = false;
@@ -381,7 +383,7 @@ void drawModel(model* model, int index)
 	// Add an offset before caculate the model position matrix
 	// Arrange the models into a circle which radius is 4
 	float ang = 2 * PI / filenames.size();
-	float offset = (cur_idx - index) * ang + (1.5 + remainAngle - remainAngle1) * PI;
+	float offset = (index - cur_idx) * ang + (1.5 - remainAngle + remainAngle1) * PI;
 	float x = cosf(offset) * 4;
 	float y = 4 + sinf(offset) * 4;
 
@@ -704,13 +706,13 @@ void onKeyboard(unsigned char key, int x, int y)
 	case 'z':
 		// Change model and trigger the model moving animation
 		cur_idx = (cur_idx + filenames.size() - 1) % filenames.size();
-		remainAngle += PI / filenames.size() / 2;
+		remainAngle += PI / filenames.size() / 4;
 		printf("change to previous model");
 		break;
 	case 'x':
 		// Change model and trigger the model moving animation
 		cur_idx = (cur_idx + 1) % filenames.size();
-		remainAngle1 += PI / filenames.size() /2;
+		remainAngle1 += PI / filenames.size() / 4;
 		printf("change to next model");
 		break;
 	case 'w':
@@ -855,7 +857,7 @@ void initParameter()
 	main_camera.up_vector = Vector3(0.0f, 1.0f, 0.0f);
 
 	setViewingMatrix();
-	//setOrthogonal();	//set default projection matrix as orthogonal matrix
+	// Set persepective matrix as default
 	setPerspective();
 }
 
