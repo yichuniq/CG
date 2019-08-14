@@ -8,3 +8,6 @@
   - Projection – parallel and perspective projection
   - OpenGL transformation APIs are not allowed
 - Switch model with a smooth transition.
+## TODO
+- Add control instructions
+- Add demo/results
