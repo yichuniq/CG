@@ -1,14 +1,14 @@
-# Computer Graphics 
-## Hw2 Transformation
+# Computer Graphics
+
+## 2. Transformation
 ### Goals
-- Render a floor under the current model.
-- Interact with the model using keyboard and mouse.
-- Control the camera.
-- Implement the geometrical, viewing and projection matrices.
-  - Geometrical transformation – translation, scaling, and rotation
-  - Projection – parallel and perspective projection
-  - OpenGL transformation APIs are not allowed
-- Switch model with a smooth transition.
+  - Render a base floor and all the 3D models properly.
+  - Interact with the models using keyboard and mouse.
+  - Control the camera.
+  - Implement the geometrical, viewing and projection matrices without OpenGL API.
+  - Switch between models with a smooth transition.
 ### TODO
-- Add control instructions
-- Add demo/results
+  - Add demo/results
+## 3. Lightning
+## 4. Texture Mapping
+
