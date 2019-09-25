@@ -1,5 +1,6 @@
-# Computer Graphics - Transformation
-## Goals
+# Computer Graphics 
+## Hw2 Transformation
+### Goals
 - Render a floor under the current model.
 - Interact with the model using keyboard and mouse.
 - Control the camera.
@@ -8,6 +9,6 @@
   - Projection – parallel and perspective projection
   - OpenGL transformation APIs are not allowed
 - Switch model with a smooth transition.
-## TODO
+### TODO
 - Add control instructions
 - Add demo/results
